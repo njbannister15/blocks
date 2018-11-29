@@ -1,0 +1,25 @@
+{
+  "name": "swagexpress",
+  "version": "1.0.0",
+  "description": "Swagger and express together",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "author": "Nicholas Bannister",
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^6.6.1",
+    "debug": "^4.1.0",
+    "express": "^4.16.4",
+    "lodash": "^4.17.11",
+    "swagger-parser": "^6.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-google": "^0.11.0"
+  }
+}

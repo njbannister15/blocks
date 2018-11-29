@@ -1,0 +1,58 @@
+openapi: 3.0.2
+info:
+  title: Login Logout
+  description: Login and Logout API
+  version: 1.0.0
+paths:
+  /register:
+    summary: register a new user
+    post:
+      tags: ["Registration"]
+      operationId: register
+      requestBody:
+        description: registration request
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/UserPass'
+          
+      responses:
+        '201':
+          description: Successfully Registers
+  /login:
+    post:
+      tags: ["Registration"]
+      operationId: login
+      requestBody:
+        description: registration request
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/UserPass'
+      responses:
+        '201':
+          description: Successfully Logged In
+    summary: login
+  /logout:
+    summary: logout
+    get:
+      tags: ["Registration"]
+      operationId: logout
+      responses:
+        '200':
+          description: Successfully Logged Out
+
+components:
+  schemas:
+    UserPass:
+      type: 'object'
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        
+      
