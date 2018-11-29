@@ -1,9 +1,12 @@
 const SwaggerParser = require("swagger-parser");
 const Ajv = require("ajv");
 const _ = require("lodash");
-const debug = require("debug")("swagexpress");
 
 class ValidateMiddleware {
+    /**
+     * Constructor
+     * @param {Object} schema The Json schema document.
+     */
     constructor(schema) {
         this.ajv = new Ajv();
         this.schema = schema;
@@ -20,64 +23,61 @@ class ValidateMiddleware {
 }
 
 class SwagExpress {
+    /**
+     * Constructor
+     * @param {object} app The express app.
+     * @param {object} services The services that should be assigned to routes.
+     * @param {object} api The swagger api.
+     */
     constructor(app, services, api) {
         this.app = app;
         this.api = api;
         this.services = services;
-
-        
     }
 
-    assigner(operation, pathValue, pathKey, validater = (req, res, next) => next()) {
-        
-        let opObj = pathValue[operation];
-        this.app[operation](pathKey, validater, this.services[opObj.tags[0]][opObj.operationId]);
+    /**
+     * Helper function that assigns handlers to paths.
+     * @param {sting} httpVerb get The httpe verb (eg. get | put | post | patch | delete)
+     * @param {object} pathValue 
+     * @param {string} path The path (eg. /some/path/here)
+     * @param {string} $refs The reference within the api (eg. #/components/schemas/UserPass)
+     */
+    _assigner(httpVerb, pathValue, path, $refs) {
+        let opObj = pathValue[httpVerb];
+        if (pathValue[httpVerb].hasOwnProperty("requestBody")) {
+            let requestBody = pathValue[httpVerb].requestBody;
+            let schema = $refs.get(requestBody.content["application/json"].schema.$ref);
+            let validateMiddleware = new ValidateMiddleware(schema);
+            this.app[httpVerb](path, validateMiddleware.validate, this.services[opObj.tags[0]][opObj.httpVerbId]);
+        } else {
+            this.app[httpVerb](path, this.services[opObj.tags[0]][opObj.httpVerbId]);
+        }
     }
 
-
-    assignerV2(operation, pathValue, pathKey, refs) {
-        let opObj = pathValue[operation];
-        if (pathValue[operation].hasOwnProperty("requestBody")) {
-            let requestBody = pathValue[operation].requestBody;
-            let schema = refs.get(requestBody.content["application/json"].schema.$ref);
-            let validateMiddleware = new ValidateMiddleware(schema);            
-            this.app[operation](pathKey, validateMiddleware.validate, this.services[opObj.tags[0]][opObj.operationId]);
-        } else {            
-            this.app[operation](pathKey, this.services[opObj.tags[0]][opObj.operationId]);
-        }      
-        
-    }
-
+    /**
+     * Creates and assignes the correct route handles and request validator to the express app.
+     */
     create() {
 
         return new Promise((resolve, reject) => {
             SwaggerParser.parse(this.api)
                 .then((api) => {
                     SwaggerParser.resolve(this.api).then($refs => {
-                        _.forIn(api.paths, (pathValue, pathKey) => {
+                        _.forIn(api.paths, (pathValue, path) => {
                             if (pathValue.get) {
-                                this.assignerV2("get", pathValue, pathKey, $refs);
+                                this._assigner("get", pathValue, path, $refs);
                             }
                             if (pathValue.put) {
-                                this.assignerV2("put", pathValue, pathKey, $refs);
+                                this._assigner("put", pathValue, path, $refs);
                             }
                             if (pathValue.post) {
-                                this.assignerV2("post", pathValue, pathKey, $refs);
-                                /*
-                                if (pathValue.post.hasOwnProperty("requestBody")) {
-                                    let requestBody = pathValue.post.requestBody;
-                                    let schema = $refs.get(requestBody.content["application/json"].schema.$ref);
-                                    let validateMiddleware = new ValidateMiddleware(schema);
-                                    this.assigner("post", pathValue, pathKey, validateMiddleware.validate);
-                                } else {
-                                    this.assigner("post", pathValue, pathKey);
-                                }*/
+                                this._assigner("post", pathValue, path, $refs);
                             }
                             if (pathValue.delete) {
-                                this.assigner("delete", pathValue, pathKey);
+                                this._assigner("delete", pathValue, path, $refs);
                             }
                             if (pathValue.patch) {
-                                this.assigner("patch", pathValue, pathKey);
+                                this._assigner("patch", pathValue, path, $refs);
                             }
                         });
                         resolve(this.app);
