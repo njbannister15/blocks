@@ -48,9 +48,9 @@ class SwagExpress {
             let requestBody = pathValue[httpVerb].requestBody;
             let schema = $refs.get(requestBody.content["application/json"].schema.$ref);
             let validateMiddleware = new ValidateMiddleware(schema);
-            this.app[httpVerb](path, validateMiddleware.validate, this.services[opObj.tags[0]][opObj.httpVerbId]);
+            this.app[httpVerb](path, validateMiddleware.validate, this.services[opObj.tags[0]][opObj.operationId]);
         } else {
-            this.app[httpVerb](path, this.services[opObj.tags[0]][opObj.httpVerbId]);
+            this.app[httpVerb](path, this.services[opObj.tags[0]][opObj.operationId]);
         }
     }
 
