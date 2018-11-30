@@ -1,4 +1,4 @@
-class Registration {
+class MongoRegistration {
     register(req, res, next) {
         res.send("register");
     }
@@ -10,4 +10,4 @@ class Registration {
     }
 }
 
-module.exports = Registration;
+module.exports = MongoRegistration;

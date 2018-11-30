@@ -7,9 +7,6 @@ var SwagExpress = require('swagexpress');
 
 const services = require('./services')
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json()); // for parsing application/json
@@ -26,8 +23,5 @@ swagexpress.create()
     .catch(function (err) {
         console.error(err);
     });
-
-//app.use('/', indexRouter);
-//app.use('/users', usersRouter);
 
 module.exports = app;
