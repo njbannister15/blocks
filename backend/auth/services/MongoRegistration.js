@@ -1,6 +1,5 @@
 let User = require("../models/User");
 const bcrypt = require("bcrypt");
-let mongogoose = require("../lib/MongoGoose/MongoGoose");
 
 class MongoRegistration {
 
