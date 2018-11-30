@@ -1,4 +1,25 @@
-let mongoose = require('mongoose')
 
-var schema = new mongoose.Schema({ firstName: 'string', lastName: 'string' });
-var User = mongoose.model('User', schema);
+const Schema = require("../lib/MongoGoose/Schema");
+let mongogoose = require("../lib/MongoGoose/MongoGoose");
+
+let schema = new Schema(
+    {
+        firstName: {
+            type: "string",
+        },
+        lastName: {
+            type: "string"
+        },
+        email: {
+            type: "string",
+            index: 1,
+            unique: true
+        }
+    }, {
+        collection: "user"
+    }
+);
+
+let User = mongogoose.model("User", schema);
+
+module.exports = User;

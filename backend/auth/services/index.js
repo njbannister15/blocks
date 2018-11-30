@@ -1,5 +1,5 @@
-const MongoRegistration = require('./MongoRegistration');
+const MongoRegistration = require("./MongoRegistration");
 
 module.exports = {
     Registration: new MongoRegistration()
-}
+};

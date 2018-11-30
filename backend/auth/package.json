@@ -6,13 +6,18 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "bcrypt": "^3.0.2",
+    "bson-ext": "^2.0.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "dotenv": "^6.1.0",
     "express": "~4.16.0",
     "lodash": "^4.17.11",
+    "mongodb": "^3.1.10",
+    "mongoose": "^5.3.14",
     "morgan": "~1.9.0",
-    "swagger-parser": "^6.0.2",
-    "swagexpress": "file:../swagexpress"
+    "swagexpress": "file:../swagexpress",
+    "swagger-parser": "^6.0.2"
   },
   "devDependencies": {
     "eslint": "^5.9.0"
