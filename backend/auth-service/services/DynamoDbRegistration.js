@@ -14,7 +14,6 @@ class MongoRegistration {
         user.save().then(document => {
             res.json(document);
         }).catch(err => res.json(err));
-
     }
 
     login(req, res, next) {

@@ -1,3 +1,4 @@
+const debug = require("debug")("swagespress:index");
 const SwaggerParser = require("swagger-parser");
 const Ajv = require("ajv");
 const _ = require("lodash");

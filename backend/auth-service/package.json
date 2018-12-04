@@ -17,6 +17,8 @@
     "mongoose": "^5.3.14",
     "morgan": "~1.9.0",
     "swagexpress": "file:../swagexpress",
+    "mongogoose": "file:../mongogoose",
+    "dynogoose": "file:../dynogoose",
     "swagger-parser": "^6.0.2"
   },
   "devDependencies": {
